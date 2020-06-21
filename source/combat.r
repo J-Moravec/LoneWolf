@@ -51,11 +51,15 @@ combat_message = function(round, roll, dmg_pen, dmg_een, pen, een){
     }
 
 
-combat_round = function(pcs, pen, ecs, een, round=1){
+combat_round = function(pcs, pen, ecs, een, round=1, sommerswerd=FALSE){
     roll = roll()
     damage = combat_damage(pcs, ecs, roll)
     dmg_pen = damage["pen"]
     dmg_een = damage["een"]
+
+    if(sommerswerd){
+        dmg_een = 2*dmg_een
+        }
 
     if(is.na(dmg_pen)){
         dmg_pen = "K"
@@ -78,7 +82,7 @@ combat_round = function(pcs, pen, ecs, een, round=1){
     }
 
 
-evade = function(pcs, pen, ecs, een, round=""){
+evade = function(pcs, pen, ecs, een, round="", sommerswerd=FALSE){
     roll = roll()
     damage = combat_damage(pcs, ecs, roll)
     dmg_pen = damage["pen"]
@@ -107,12 +111,12 @@ evade = function(pcs, pen, ecs, een, round=""){
 # pen -- player's endurance
 # ecs -- enemy's combat skill
 # een -- enemy's endurance 
-combat = function(pcs, pen, ecs, een){
+combat = function(pcs, pen, ecs, een, sommerswerd=FALSE){
     combat_ratio = pcs - ecs
 
     round = 1
     while( (pen > 0 && een > 0) ){
-        remaining = combat_round(pcs, pen, ecs, een, round)
+        remaining = combat_round(pcs, pen, ecs, een, round, sommerswerd)
         pen = remaining["pen"]
         een = remaining["een"]
         round = round + 1
